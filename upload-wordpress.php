@@ -66,14 +66,19 @@ print ("Confluence blog post upload running...");
 // Loop over items
 foreach ($wpxml->channel->item as $item) {
 
+
   print("\nUploading post: ".(string)$item->title);
   
   // Assemble the object to post
+  $creator = (string)$item->creator[0];
+  $body = nl2br((string)$item->encoded[0]);
+  $body = "Original Author: <b>".$creator."</b> <br /><br />".$body;
+
   $newpage = [
     "type" => "page",
     "title" => (string)$item->title,
     "space" => [ "key" => $target ],
-    "body" => [ "storage" => [ "value" => (string)$item->encoded[0], "representation" => "storage" ] ]
+    "body" => [ "storage" => [ "value" => $body, "representation" => "storage" ] ]
   ];
 
   // Go post it
